@@ -81,7 +81,7 @@ export const PackageCard = ({
   pkg,
   onWishlistToggle,
 }: {
-  pkg: Package;
+  pkg: Package & { isWishlisted: boolean };
   onWishlistToggle: (id: number) => void;
 }) => {
     const agent = agents.find(a => a.id === pkg.agentId);
@@ -89,7 +89,7 @@ export const PackageCard = ({
         <Card className="overflow-hidden border-none shadow-lg transition-transform duration-300 hover:scale-105 flex flex-col">
             <CardContent className="p-0 flex flex-col flex-grow">
             <div className="relative">
-                <Link href={`/packages/${pkg.id}`} passHref>
+                <Link href={`/packages/${pkg.slug}`} passHref>
                     <Image
                         src={pkg.image}
                         alt={pkg.title}
@@ -284,7 +284,7 @@ export default function Home() {
     if (activeDestination === "All") {
       setPackageList(allPackages.slice(0, 4));
     } else {
-      setPackageList(allPackages.filter(p => p.destination === activeDestination));
+      setPackageList(allPackages.filter(p => p.destination === activeDestination).slice(0, 4));
     }
   }, [activeDestination]);
 

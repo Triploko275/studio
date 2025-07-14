@@ -1,8 +1,10 @@
 
+
 export const packages = [
   {
     id: 1,
     title: "Bangkok & Pattaya Discovery",
+    slug: "bangkok-pattaya-discovery",
     destination: "Thailand",
     duration: "5 Days",
     rating: 4.5,
@@ -15,6 +17,7 @@ export const packages = [
   {
     id: 2,
     title: "Enchanting Bali Getaway",
+    slug: "enchanting-bali-getaway",
     destination: "Indonesia",
     duration: "7 Days",
     rating: 4.8,
@@ -27,6 +30,7 @@ export const packages = [
   {
     id: 3,
     title: "Highlights of Vietnam",
+    slug: "highlights-of-vietnam",
     destination: "Vietnam",
     duration: "6 Days",
     rating: 4.6,
@@ -39,6 +43,7 @@ export const packages = [
   {
     id: 4,
     title: "Singapore City Spectacular",
+    slug: "singapore-city-spectacular",
     destination: "Singapore",
     duration: "4 Days",
     rating: 4.7,
@@ -51,6 +56,7 @@ export const packages = [
   {
     id: 5,
     title: "Malaysian Marvels",
+    slug: "malaysian-marvels",
     destination: "Malaysia",
     duration: "6 Days",
     rating: 4.4,
@@ -63,6 +69,7 @@ export const packages = [
   {
     id: 6,
     title: "Colors of Sri Lanka",
+    slug: "colors-of-sri-lanka",
     destination: "Sri Lanka",
     duration: "8 Days",
     rating: 4.9,
@@ -75,6 +82,7 @@ export const packages = [
   {
     id: 7,
     title: "Philippine Island Hopping",
+    slug: "philippine-island-hopping",
     destination: "Philippines",
     duration: "10 Days",
     rating: 4.8,
@@ -87,6 +95,7 @@ export const packages = [
   {
     id: 8,
     title: "Laos Heritage Trail",
+    slug: "laos-heritage-trail",
     destination: "Laos",
     duration: "5 Days",
     rating: 4.5,

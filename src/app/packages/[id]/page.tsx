@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import * as React from "react";
@@ -110,8 +111,8 @@ const AskAgentDialog = ({ agent }: { agent: (typeof agents)[0] }) => {
 
 export default function PackageDetailsPage() {
   const params = useParams();
-  const packageId = parseInt(params.id as string, 10);
-  const pkg = allPackages.find((p) => p.id === packageId);
+  const packageSlug = params.slug as string;
+  const pkg = allPackages.find((p) => p.slug === packageSlug);
   const agent = pkg ? agents.find((a) => a.id === pkg.agentId) : null;
   const { toast } = useToast();
 

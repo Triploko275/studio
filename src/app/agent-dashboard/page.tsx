@@ -26,19 +26,30 @@ import { packages } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
-const agentPackages = packages.filter(p => p.agentId === 1).map(p => ({
-    ...p,
-    approvalStatus: ['Approved', 'Pending', 'Rejected'][Math.floor(Math.random() * 3)] as 'Approved' | 'Pending' | 'Rejected',
-}));
-
-type Package = (typeof agentPackages)[0] & { itinerary?: any[], inclusions?: string[], exclusions?: string[] };
+type Package = (typeof packages)[0] & {
+    approvalStatus: 'Approved' | 'Pending' | 'Rejected';
+    itinerary?: any[];
+    inclusions?: string[];
+    exclusions?: string[];
+};
 
 
 export default function AgentDashboardPage() {
   const { toast } = useToast();
-  const [packageStatus, setPackageStatus] = React.useState(
-    new Map(agentPackages.map(p => [p.id, true]))
-  );
+  const [agentPackages, setAgentPackages] = React.useState<Package[]>([]);
+  const [packageStatus, setPackageStatus] = React.useState<Map<number, boolean>>(new Map());
+
+  React.useEffect(() => {
+    const processedPackages = packages
+      .filter(p => p.agentId === 1)
+      .map(p => ({
+        ...p,
+        approvalStatus: ['Approved', 'Pending', 'Rejected'][Math.floor(Math.random() * 3)] as 'Approved' | 'Pending' | 'Rejected',
+      }));
+    
+    setAgentPackages(processedPackages);
+    setPackageStatus(new Map(processedPackages.map(p => [p.id, true])));
+  }, []);
 
   const handleStatusToggle = (id: number) => {
     setPackageStatus(prev => {
@@ -164,7 +175,7 @@ export default function AgentDashboardPage() {
                      <div className="flex items-center gap-2">
                         <Switch
                             id={`status-${pkg.id}`}
-                            checked={packageStatus.get(pkg.id)}
+                            checked={packageStatus.get(pkg.id) ?? true}
                             onCheckedChange={() => handleStatusToggle(pkg.id)}
                             disabled={pkg.approvalStatus !== 'Approved'}
                         />

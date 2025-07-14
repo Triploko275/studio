@@ -26,13 +26,18 @@ const bookedTrips: Trip[] = [
 ];
 
 const calculatePayout = (trip: Trip) => {
+    const totalCommission = trip.totalPaid * 0.9; // Assuming a 10% platform fee
+
     if (trip.status === "Completed") {
-        return trip.totalPaid * 0.9; // Assuming a 10% commission
+        return totalCommission; 
     }
-    // Check if trip is ongoing (trip date has passed)
-    if (new Date(trip.tripDate) < new Date()) {
-        return (trip.totalPaid * 0.9) / 2;
+    
+    // For ongoing trips, release 50% after the trip start date has passed
+    if (trip.status === "Ongoing" && new Date(trip.tripDate) < new Date()) {
+        return totalCommission / 2;
     }
+
+    // No payout available yet for future trips or other statuses
     return 0;
 };
 
@@ -76,7 +81,7 @@ export default function RequestPayoutPage() {
                         <p className="text-muted-foreground">Review your eligible trip earnings and request a payout.</p>
                     </div>
                 </div>
-                <Button onClick={handleRequestPayout} size="lg">
+                <Button onClick={handleRequestPayout} size="lg" disabled={totalAvailable === 0}>
                     Request Payout ({`₹${totalAvailable.toLocaleString()}`})
                 </Button>
             </div>
@@ -99,7 +104,7 @@ export default function RequestPayoutPage() {
                         </TableHeader>
                         <TableBody>
                             {availablePayouts.map((trip) => (
-                                <TableRow key={trip.id}>
+                                <TableRow key={trip.id} className={trip.payout === 0 ? 'opacity-50' : ''}>
                                     <TableCell>{trip.id}</TableCell>
                                     <TableCell>
                                         <div className="font-medium">{trip.packageName}</div>
@@ -115,6 +120,10 @@ export default function RequestPayoutPage() {
                                     <TableCell className="text-right font-bold">₹{trip.payout.toLocaleString()}</TableCell>
                                 </TableRow>
                             ))}
+                             <TableRow className="bg-muted/50 font-bold">
+                                <TableCell colSpan={4} className="text-right">Total Available</TableCell>
+                                <TableCell className="text-right text-lg">₹{totalAvailable.toLocaleString()}</TableCell>
+                            </TableRow>
                         </TableBody>
                     </Table>
                 </CardContent>

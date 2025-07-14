@@ -122,6 +122,14 @@ export function PackageDetailsClient({ pkg, agent }: { pkg: Package, agent: Agen
     });
   };
 
+  const copyLinkToClipboard = async () => {
+    await navigator.clipboard.writeText(window.location.href);
+    toast({
+      title: "Link Copied!",
+      description: "The package URL has been copied to your clipboard.",
+    });
+  };
+
   const handleShare = async () => {
     if (!pkg) return;
     const shareData = {
@@ -129,23 +137,19 @@ export function PackageDetailsClient({ pkg, agent }: { pkg: Package, agent: Agen
       text: `Check out this amazing travel package: ${pkg.title}`,
       url: window.location.href,
     };
-    try {
-      if (navigator.share) {
+    
+    // Use Web Share API if available and allowed
+    if (navigator.share) {
+      try {
         await navigator.share(shareData);
-      } else {
-        await navigator.clipboard.writeText(window.location.href);
-        toast({
-          title: "Link Copied!",
-          description: "The package URL has been copied to your clipboard.",
-        });
+      } catch (error) {
+        // Fallback to clipboard if share fails (e.g., permission denied)
+        console.error("Web Share API failed, falling back to clipboard:", error);
+        await copyLinkToClipboard();
       }
-    } catch (error) {
-      console.error("Error sharing:", error);
-      toast({
-        variant: "destructive",
-        title: "Could not share",
-        description: "Something went wrong while trying to share.",
-      });
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      await copyLinkToClipboard();
     }
   };
 

@@ -96,9 +96,53 @@ const packages = [
     hint: "singapore skyline",
     isWishlisted: false,
   },
+  {
+    id: 5,
+    title: "Malaysian Marvels",
+    destination: "Malaysia",
+    duration: "6 Days",
+    rating: 4.4,
+    price: "48,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "malaysia city",
+    isWishlisted: false,
+  },
+  {
+    id: 6,
+    title: "Colors of Sri Lanka",
+    destination: "Sri Lanka",
+    duration: "8 Days",
+    rating: 4.9,
+    price: "60,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "sri lanka tea plantation",
+    isWishlisted: false,
+  },
+  {
+    id: 7,
+    title: "Philippine Island Hopping",
+    destination: "Philippines",
+    duration: "10 Days",
+    rating: 4.8,
+    price: "75,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "philippines boat",
+    isWishlisted: false,
+  },
+  {
+    id: 8,
+    title: "Laos Heritage Trail",
+    destination: "Laos",
+    duration: "5 Days",
+    rating: 4.5,
+    price: "40,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "laos temple",
+    isWishlisted: false,
+  },
 ];
 
-const destinations = ["All", "Thailand", "Vietnam", "Singapore", "Bali", "Malaysia"];
+const destinations = ["All", "Thailand", "Vietnam", "Singapore", "Malaysia", "Indonesia", "Philippines", "Sri Lanka", "Laos"];
 
 const testimonials = [
   {

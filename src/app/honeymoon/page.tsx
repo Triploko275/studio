@@ -1,12 +1,12 @@
 
+"use client";
+
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Heart, Star, MapPin, Clock } from "lucide-react";
+import { ArrowLeft, Heart, Star, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { packages as allPackages, agents } from "@/lib/data";
+import { packages as allPackages } from "@/lib/data";
 import { PackageCard } from "@/app/page";
 
 

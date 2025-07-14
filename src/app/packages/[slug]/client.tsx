@@ -143,7 +143,7 @@ export function PackageDetailsClient({ pkg, agent }: { pkg: Package, agent: Agen
       try {
         await navigator.share(shareData);
       } catch (error) {
-        // Fallback to clipboard if share fails (e.g., permission denied)
+        // Fallback to clipboard if share fails
         await copyLinkToClipboard();
       }
     } else {

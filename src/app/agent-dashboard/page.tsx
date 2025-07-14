@@ -2,6 +2,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { PlusCircle, FileDown, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,11 +23,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { packages } from "@/lib/data";
+import { useToast } from "@/hooks/use-toast";
 
 // In a real app, this would be filtered by the logged-in agent's ID
 const agentPackages = packages.filter(p => p.agentId === 1);
+type Package = (typeof agentPackages)[0];
 
 export default function AgentDashboardPage() {
+  const { toast } = useToast();
   const [packageStatus, setPackageStatus] = React.useState(
     new Map(agentPackages.map(p => [p.id, true]))
   );
@@ -39,6 +43,43 @@ export default function AgentDashboardPage() {
     });
   };
 
+  const handleDownload = (pkg: Package) => {
+    const content = `Package: ${pkg.title}\nDestination: ${pkg.destination}\nDuration: ${pkg.duration}\nPrice: ₹${pkg.price}`;
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${pkg.title.replace(/\s+/g, '-')}-details.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast({ title: "Download Started", description: "Your package details are being downloaded." });
+  };
+
+  const handleShare = async (pkg: Package) => {
+    const publicUrl = `${window.location.origin}/packages/${pkg.id}`;
+    const shareData = {
+      title: pkg.title,
+      text: `Check out this amazing travel package I'm offering: ${pkg.title}`,
+      url: publicUrl,
+    };
+    
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        // Fallback to clipboard if share fails
+        await navigator.clipboard.writeText(publicUrl);
+        toast({ title: "Link Copied!", description: "The package URL has been copied to your clipboard." });
+      }
+    } else {
+      await navigator.clipboard.writeText(publicUrl);
+      toast({ title: "Link Copied!", description: "The package URL has been copied to your clipboard." });
+    }
+  };
+
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -46,10 +87,12 @@ export default function AgentDashboardPage() {
             <h1 className="text-3xl font-bold font-headline">My Packages</h1>
             <p className="text-muted-foreground">Here you can manage all your travel packages.</p>
         </div>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Create New Package
-        </Button>
+        <Link href="/agent-dashboard/packages/new">
+            <Button>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Create New Package
+            </Button>
+        </Link>
       </div>
       <Card>
         <CardHeader>
@@ -88,12 +131,14 @@ export default function AgentDashboardPage() {
                      </div>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="outline" size="sm" className="mr-2">View/Edit</Button>
-                    <Button variant="ghost" size="icon" className="mr-2">
+                    <Link href={`/agent-dashboard/packages/${pkg.id}/edit`}>
+                        <Button variant="outline" size="sm" className="mr-2">View/Edit</Button>
+                    </Link>
+                    <Button variant="ghost" size="icon" className="mr-2" onClick={() => handleDownload(pkg)}>
                         <FileDown className="h-4 w-4" />
-                        <span className="sr-only">Download PDF</span>
+                        <span className="sr-only">Download Details</span>
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" onClick={() => handleShare(pkg)}>
                         <Share2 className="h-4 w-4" />
                          <span className="sr-only">Share</span>
                     </Button>

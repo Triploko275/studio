@@ -29,19 +29,36 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 
 type AgentWithStatus = (typeof agents)[0] & {
     kycStatus: "Verified" | "Pending" | "Rejected";
     accountStatus: "Active" | "Suspended";
 };
 
-const allAgents: AgentWithStatus[] = agents.map(agent => ({
-    ...agent,
-    kycStatus: ["Verified", "Pending", "Rejected"][Math.floor(Math.random() * 3)] as "Verified" | "Pending" | "Rejected",
-    accountStatus: Math.random() > 0.2 ? "Active" : "Suspended",
-}));
-
 export default function SuperAdminAgentsPage() {
+    const { toast } = useToast();
+    const [agentList, setAgentList] = React.useState<AgentWithStatus[]>([]);
+
+    React.useEffect(() => {
+        const initialAgents = agents.map(agent => ({
+            ...agent,
+            kycStatus: ["Verified", "Pending", "Rejected"][Math.floor(Math.random() * 3)] as "Verified" | "Pending" | "Rejected",
+            accountStatus: Math.random() > 0.2 ? "Active" : "Suspended",
+        }));
+        setAgentList(initialAgents);
+    }, []);
+
+    const handleKycStatusChange = (agentId: number, status: AgentWithStatus['kycStatus']) => {
+        setAgentList(prev => prev.map(agent => agent.id === agentId ? { ...agent, kycStatus: status } : agent));
+        toast({ title: `Agent KYC set to ${status}` });
+    };
+    
+    const handleAccountStatusChange = (agentId: number, status: AgentWithStatus['accountStatus']) => {
+        setAgentList(prev => prev.map(agent => agent.id === agentId ? { ...agent, accountStatus: status } : agent));
+        toast({ title: `Agent account has been ${status}` });
+    };
+
     return (
         <>
             <div className="flex items-center justify-between">
@@ -71,12 +88,13 @@ export default function SuperAdminAgentsPage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {allAgents.map((agent) => (
+                            {agentList.map((agent) => (
                                 <TableRow key={agent.id}>
                                     <TableCell className="font-medium">{agent.name}</TableCell>
                                     <TableCell>{agent.specialty}</TableCell>
                                     <TableCell>
-                                        <Badge variant={agent.kycStatus === 'Verified' ? "default" : (agent.kycStatus === 'Pending' ? "secondary" : "destructive")}>
+                                        <Badge variant={agent.kycStatus === 'Verified' ? "default" : (agent.kycStatus === 'Pending' ? "secondary" : "destructive")}
+                                         className={agent.kycStatus === 'Verified' ? 'bg-green-100 text-green-800' : (agent.kycStatus === 'Pending' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800')}>
                                             {agent.kycStatus}
                                         </Badge>
                                     </TableCell>
@@ -94,11 +112,16 @@ export default function SuperAdminAgentsPage() {
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                                <DropdownMenuItem>View Details</DropdownMenuItem>
-                                                <DropdownMenuItem>View Packages</DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => toast({ title: "Navigating to agent's details..."})}>View Details</DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => toast({ title: "Viewing all agent packages..."})}>View Packages</DropdownMenuItem>
                                                 <DropdownMenuSeparator />
-                                                <DropdownMenuItem>Approve KYC</DropdownMenuItem>
-                                                <DropdownMenuItem className="text-destructive">Suspend Agent</DropdownMenuItem>
+                                                <DropdownMenuLabel>KYC</DropdownMenuLabel>
+                                                <DropdownMenuItem onSelect={() => handleKycStatusChange(agent.id, 'Verified')}>Approve KYC</DropdownMenuItem>
+                                                <DropdownMenuItem className="text-destructive" onSelect={() => handleKycStatusChange(agent.id, 'Rejected')}>Reject KYC</DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuLabel>Account</DropdownMenuLabel>
+                                                <DropdownMenuItem onSelect={() => handleAccountStatusChange(agent.id, 'Active')} disabled={agent.accountStatus === 'Active'}>Re-activate Agent</DropdownMenuItem>
+                                                <DropdownMenuItem className="text-destructive" onSelect={() => handleAccountStatusChange(agent.id, 'Suspended')} disabled={agent.accountStatus === 'Suspended'}>Suspend Agent</DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>
@@ -111,4 +134,3 @@ export default function SuperAdminAgentsPage() {
         </>
     );
 }
-

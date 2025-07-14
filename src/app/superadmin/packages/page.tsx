@@ -2,6 +2,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
     Card,
     CardContent,
@@ -117,7 +118,9 @@ export default function SuperAdminPackagesPage() {
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                                <DropdownMenuItem onSelect={() => toast({ title: "Viewing package details..."})}>View Details</DropdownMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                    <Link href={`/packages/${pkg.id}`}>View Details</Link>
+                                                </DropdownMenuItem>
                                                 <DropdownMenuItem onSelect={() => handleFeatureToggle(pkg.id)}>
                                                     {pkg.isFeatured ? 'Un-feature Package' : 'Feature Package'}
                                                 </DropdownMenuItem>

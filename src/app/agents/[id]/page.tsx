@@ -1,10 +1,7 @@
-
-"use client";
-
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Star, MapPin, Phone, Mail, Globe } from "lucide-react";
+import { ArrowLeft, Star, Phone, Mail, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -84,11 +81,10 @@ const AgentHeader = () => (
     </header>
 );
 
-export default function AgentProfilePage({ params }: { params: { id: string } }) {
-    const agentId = parseInt(params.id, 10);
-    const agent = agents.find(a => a.id === agentId);
-    const agentPackages = allPackages.filter(p => p.agentId === agentId);
-
+// Dummy component to allow client-side interactivity for wishlisting
+function WishlistWrapper({ agent, agentPackages }: { agent: any, agentPackages: any[] }) {
+    "use client";
+    
     // Dummy state for wishlist toggle
     const [wishlist, setWishlist] = React.useState(
         new Set(allPackages.filter(p => p.isWishlisted).map(p => p.id))
@@ -106,6 +102,65 @@ export default function AgentProfilePage({ params }: { params: { id: string } })
         });
     };
 
+    return (
+        <main className="flex-1 overflow-y-auto p-6">
+            <Card className="overflow-hidden border-none shadow-lg mb-8">
+                <CardContent className="p-6">
+                    <div className="flex flex-col sm:flex-row items-start gap-6">
+                        <Avatar className="w-24 h-24 border-4 border-primary">
+                            <AvatarImage src={agent.logo} data-ai-hint={agent.hint} />
+                            <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                            <h2 className="text-2xl font-bold font-headline">{agent.name}</h2>
+                            <p className="text-muted-foreground">{agent.specialty}</p>
+                            <div className="flex items-center gap-2 mt-2">
+                                <Star className="h-5 w-5 text-accent fill-current" />
+                                <span className="font-bold">{agent.rating}</span>
+                                <span className="text-sm text-muted-foreground">({agent.reviews} reviews)</span>
+                            </div>
+                            <p className="mt-4 text-sm">{agent.description}</p>
+                        </div>
+                    </div>
+                    <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                        <div className="flex items-center gap-2">
+                            <Phone className="h-4 w-4 text-primary" />
+                            <a href={`tel:${agent.phone}`} className="hover:underline">{agent.phone}</a>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Mail className="h-4 w-4 text-primary" />
+                            <a href={`mailto:${agent.email}`} className="hover:underline">{agent.email}</a>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Globe className="h-4 w-4 text-primary" />
+                            <a href={`https://${agent.website}`} target="_blank" rel="noopener noreferrer" className="hover:underline">{agent.website}</a>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <h3 className="text-xl font-bold font-headline mb-4">
+                Packages by {agent.name}
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {agentPackages.map((pkg) => (
+                    <PackageCard
+                        key={pkg.id}
+                        pkg={{ ...pkg, isWishlisted: wishlist.has(pkg.id) }}
+                        onWishlistToggle={handleWishlistToggle}
+                    />
+                ))}
+            </div>
+        </main>
+    )
+}
+
+export default function AgentProfilePage({ params }: { params: { id: string } }) {
+    const agentId = parseInt(params.id, 10);
+    const agent = agents.find(a => a.id === agentId);
+    const agentPackages = allPackages.filter(p => p.agentId === agentId);
+
     if (!agent) {
         return (
             <div className="flex justify-center items-center min-h-screen">
@@ -119,60 +174,9 @@ export default function AgentProfilePage({ params }: { params: { id: string } })
             <div className="mx-auto max-w-4xl">
                 <div className="flex min-h-screen w-full flex-col">
                     <AgentHeader />
-                    <main className="flex-1 overflow-y-auto p-6">
-                        <Card className="overflow-hidden border-none shadow-lg mb-8">
-                            <CardContent className="p-6">
-                                <div className="flex flex-col sm:flex-row items-start gap-6">
-                                    <Avatar className="w-24 h-24 border-4 border-primary">
-                                        <AvatarImage src={agent.logo} data-ai-hint={agent.hint} />
-                                        <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex-1">
-                                        <h2 className="text-2xl font-bold font-headline">{agent.name}</h2>
-                                        <p className="text-muted-foreground">{agent.specialty}</p>
-                                        <div className="flex items-center gap-2 mt-2">
-                                            <Star className="h-5 w-5 text-accent fill-current" />
-                                            <span className="font-bold">{agent.rating}</span>
-                                            <span className="text-sm text-muted-foreground">({agent.reviews} reviews)</span>
-                                        </div>
-                                        <p className="mt-4 text-sm">{agent.description}</p>
-                                    </div>
-                                </div>
-                                <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-                                    <div className="flex items-center gap-2">
-                                        <Phone className="h-4 w-4 text-primary" />
-                                        <a href={`tel:${agent.phone}`} className="hover:underline">{agent.phone}</a>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Mail className="h-4 w-4 text-primary" />
-                                        <a href={`mailto:${agent.email}`} className="hover:underline">{agent.email}</a>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Globe className="h-4 w-4 text-primary" />
-                                        <a href={`https://${agent.website}`} target="_blank" rel="noopener noreferrer" className="hover:underline">{agent.website}</a>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        <h3 className="text-xl font-bold font-headline mb-4">
-                            Packages by {agent.name}
-                        </h3>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {agentPackages.map((pkg) => (
-                                <PackageCard
-                                    key={pkg.id}
-                                    pkg={{ ...pkg, isWishlisted: wishlist.has(pkg.id) }}
-                                    onWishlistToggle={handleWishlistToggle}
-                                />
-                            ))}
-                        </div>
-                    </main>
+                    <WishlistWrapper agent={agent} agentPackages={agentPackages} />
                 </div>
             </div>
         </div>
     );
 }
-
-    

@@ -4,7 +4,7 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Check, Clock, Heart, MessageSquare, Send, Share2, Star, User, Users, X, ShieldCheck, Tag } from "lucide-react";
+import { ArrowLeft, Check, Clock, Heart, MessageSquare, Send, Share2, Star, User, Users, X, ShieldCheck, Tag, MapPin } from "lucide-react";
 import { packages as allPackages, agents, testimonials } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

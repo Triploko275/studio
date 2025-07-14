@@ -144,7 +144,6 @@ export function PackageDetailsClient({ pkg, agent }: { pkg: Package, agent: Agen
         await navigator.share(shareData);
       } catch (error) {
         // Fallback to clipboard if share fails (e.g., permission denied)
-        console.error("Web Share API failed, falling back to clipboard:", error);
         await copyLinkToClipboard();
       }
     } else {

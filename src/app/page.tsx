@@ -16,7 +16,9 @@ import {
   Home as HomeIcon,
   Briefcase,
   Gem,
-  Bell
+  Bell,
+  CheckCircle,
+  Megaphone
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -62,6 +64,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
 import { LoginDialog } from "@/components/auth/login-dialog";
 import { AgentCard } from "@/components/agent-card";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 type Package = (typeof allPackages)[0];
 
@@ -74,11 +77,31 @@ const AppHeader = () => (
           Roam Southeast
         </h1>
       </Link>
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon">
-          <Bell className="h-5 w-5" />
-          <span className="sr-only">Notifications</span>
-        </Button>
+      <div className="flex items-center gap-2">
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                 <Button variant="ghost" size="icon">
+                    <Bell className="h-5 w-5" />
+                    <span className="sr-only">Notifications</span>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                    <CheckCircle className="mr-2 h-4 w-4 text-green-500"/>
+                    <span>Your Bali trip is confirmed!</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                    <Megaphone className="mr-2 h-4 w-4 text-blue-500"/>
+                    <span>New deals for Thailand available.</span>
+                </DropdownMenuItem>
+                 <DropdownMenuItem>
+                    <Heart className="mr-2 h-4 w-4 text-red-500"/>
+                    <span>Someone liked your review.</span>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
         <LoginDialog />
       </div>
     </div>

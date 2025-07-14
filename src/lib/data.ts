@@ -120,7 +120,7 @@ export const testimonials = [
     name: "Priya Singh",
     avatar: "https://placehold.co/100x100.png",
     hint: "woman beach",
-    quote: "Found the perfect family package to Singapore. The ability to chat with the DMC on WhatsApp before booking was a fantastic feature. Will use again for sure.",
+    quote: "Found the perfect family package to Singapore. The ability to chat with the DMC before booking was a fantastic feature. Will use again for sure.",
   },
 ];
 
@@ -129,25 +129,33 @@ export const agents = [
         id: 1,
         name: "Siam Adventures",
         logo: "https://placehold.co/100x100.png",
-        hint: "company logo"
+        hint: "company logo",
+        rating: 4.8,
+        reviews: 120,
     },
     {
         id: 2,
         name: "Bali Horizons",
         logo: "https://placehold.co/100x100.png",
-        hint: "travel company"
+        hint: "travel company",
+        rating: 4.9,
+        reviews: 250,
     },
     {
         id: 3,
         name: "Indochina Trails",
         logo: "https://placehold.co/100x100.png",
-        hint: "logo travel"
+        hint: "logo travel",
+        rating: 4.7,
+        reviews: 180,
     },
     {
         id: 4,
         name: "Lanka Pearl Tours",
         logo: "https://placehold.co/100x100.png",
-        hint: "tour company"
+        hint: "tour company",
+        rating: 4.9,
+        reviews: 95,
     }
 ];
 

@@ -59,6 +59,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { packages as allPackages, destinations, testimonials, agents } from "@/lib/data";
 import { usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
+import { LoginDialog } from "@/components/auth/login-dialog";
 
 type Package = (typeof allPackages)[0];
 
@@ -78,10 +79,7 @@ const AppHeader = () => (
             <span className="sr-only">Wishlist</span>
           </Button>
         </Link>
-        <Button variant="ghost" size="icon">
-          <UserRound className="h-5 w-5" />
-          <span className="sr-only">Profile</span>
-        </Button>
+        <LoginDialog />
       </div>
     </div>
   </header>
@@ -358,21 +356,30 @@ export default function Home() {
               </div>
             </section>
 
-            <section>
-              <div className="overflow-x-auto px-6 pb-6 scrollbar-hide">
-                <div className="flex gap-3">
+            <section className="px-6 pb-6">
+               <Carousel
+                opts={{
+                  align: "start",
+                  dragFree: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent className="-ml-2">
                   {destinations.map((dest) => (
-                    <Button
-                      key={dest}
-                      variant={activeDestination === dest ? "default" : "secondary"}
-                      className="rounded-full shrink-0"
-                      onClick={() => setActiveDestination(dest)}
-                    >
-                      {dest}
-                    </Button>
+                    <CarouselItem key={dest} className="basis-auto pl-2">
+                      <Button
+                        variant={activeDestination === dest ? "default" : "secondary"}
+                        className="rounded-full"
+                        onClick={() => setActiveDestination(dest)}
+                      >
+                        {dest}
+                      </Button>
+                    </CarouselItem>
                   ))}
-                </div>
-              </div>
+                </CarouselContent>
+                <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden sm:flex" />
+                <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden sm:flex" />
+              </Carousel>
             </section>
 
             <section className="px-6 pb-6">

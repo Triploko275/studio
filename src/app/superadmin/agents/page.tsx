@@ -114,10 +114,10 @@ export default function SuperAdminAgentsPage() {
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                                 <DropdownMenuItem asChild>
-                                                    <Link href={`/agents/${agent.id}`}>View Details</Link>
+                                                    <Link href={`/superadmin/agents/${agent.id}`}>View Details</Link>
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem asChild>
-                                                    <Link href={`/agents/${agent.id}`}>View Packages</Link>
+                                                    <Link href={`/superadmin/agents/${agent.id}/packages`}>View Packages</Link>
                                                 </DropdownMenuItem>
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuLabel>KYC</DropdownMenuLabel>

@@ -4,7 +4,7 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Clock, Heart, MapPin, MessageSquare, Send, Share2, Star, User, Users } from "lucide-react";
+import { ArrowLeft, Check, Clock, Heart, MapPin, MessageSquare, Send, Share2, Star, User, Users, X } from "lucide-react";
 import { packages as allPackages, agents, testimonials } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -147,6 +147,24 @@ export default function PackageDetailsPage() {
     { day: 9, title: "Cooking Class", description: "Learn to cook local delicacies in a hands-on cooking class." },
     { day: 10, title: "Farewell Dinner", description: "Enjoy a special farewell dinner with cultural performances." },
   ];
+  
+  const inclusions = [
+    "Airport transfers",
+    "Accommodation in 3-star hotels",
+    "Daily breakfast",
+    "Guided tours as per itinerary",
+    "Entrance fees to specified sights",
+    "All applicable taxes",
+  ];
+
+  const exclusions = [
+    "International airfare",
+    "Visa fees",
+    "Lunches and dinners",
+    "Personal expenses",
+    "Travel insurance",
+    "Tips and gratuities",
+  ];
 
   return (
     <div className="bg-background text-foreground">
@@ -258,6 +276,36 @@ export default function PackageDetailsPage() {
                 </Accordion>
               </div>
 
+               <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-xl font-bold font-headline mb-4">
+                    What's Included
+                  </h3>
+                  <ul className="space-y-2">
+                    {inclusions.map((item, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <Check className="h-5 w-5 text-green-500 mt-1 shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold font-headline mb-4">
+                    What's Excluded
+                  </h3>
+                  <ul className="space-y-2">
+                    {exclusions.map((item, index) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <X className="h-5 w-5 text-red-500 mt-1 shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+
               <div className="mb-6" id="reviews">
                  <h3 className="text-xl font-bold font-headline mb-4">
                   What Travelers Are Saying
@@ -304,5 +352,3 @@ export default function PackageDetailsPage() {
     </div>
   );
 }
-
-    

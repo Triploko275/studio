@@ -11,6 +11,10 @@ import {
   LogOut,
   Map,
   PanelLeft,
+  Briefcase,
+  Banknote,
+  ShieldCheck,
+  Crown
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -27,9 +31,16 @@ const AgentSidebar = ({ className }: { className?: string }) => {
   const pathname = usePathname();
   const navItems = [
     { href: "/agent-dashboard", icon: Package, label: "My Packages" },
+    { href: "/agent-dashboard/bookings", icon: Briefcase, label: "Bookings" },
     { href: "/agent-dashboard/customers", icon: Users, label: "Customers" },
     { href: "/agent-dashboard/messages", icon: MessageSquare, label: "Messages" },
+    { href: "/agent-dashboard/payouts", icon: Banknote, label: "Payouts" },
   ];
+
+  const accountItems = [
+      { href: "/agent-dashboard/kyc", icon: ShieldCheck, label: "KYC Status" },
+      { href: "/agent-dashboard/subscription", icon: Crown, label: "Subscription" },
+  ]
 
   return (
     <nav className={cn("flex flex-col h-full bg-background border-r", className)}>
@@ -43,6 +54,32 @@ const AgentSidebar = ({ className }: { className?: string }) => {
         <TooltipProvider>
             <ul className="space-y-1 px-2">
               {navItems.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <li key={item.label}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Link href={item.href}>
+                          <Button
+                            variant={isActive ? "secondary" : "ghost"}
+                            className="w-full justify-start gap-2"
+                          >
+                            <item.icon className="h-4 w-4" />
+                            {item.label}
+                          </Button>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <p>{item.label}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </li>
+                );
+              })}
+            </ul>
+             <p className="px-4 text-xs font-semibold text-muted-foreground uppercase mt-4 mb-2">Account</p>
+             <ul className="space-y-1 px-2">
+              {accountItems.map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <li key={item.label}>

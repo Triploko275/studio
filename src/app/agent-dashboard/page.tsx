@@ -24,9 +24,13 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { packages } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
-// In a real app, this would be filtered by the logged-in agent's ID
-const agentPackages = packages.filter(p => p.agentId === 1);
+const agentPackages = packages.filter(p => p.agentId === 1).map(p => ({
+    ...p,
+    approvalStatus: ['Approved', 'Pending', 'Rejected'][Math.floor(Math.random() * 3)] as 'Approved' | 'Pending' | 'Rejected',
+}));
+
 type Package = (typeof agentPackages)[0] & { itinerary?: any[], inclusions?: string[], exclusions?: string[] };
 
 
@@ -135,8 +139,8 @@ export default function AgentDashboardPage() {
               <TableRow>
                 <TableHead>Package Title</TableHead>
                 <TableHead>Destination</TableHead>
-                <TableHead>Duration</TableHead>
                 <TableHead>Price (INR)</TableHead>
+                <TableHead>Approval</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -146,14 +150,23 @@ export default function AgentDashboardPage() {
                 <TableRow key={pkg.id}>
                   <TableCell className="font-medium">{pkg.title}</TableCell>
                   <TableCell>{pkg.destination}</TableCell>
-                  <TableCell>{pkg.duration}</TableCell>
                   <TableCell>₹{pkg.price}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className={cn({
+                        "text-green-600 border-green-600 bg-green-50": pkg.approvalStatus === 'Approved',
+                        "text-amber-600 border-amber-600 bg-amber-50": pkg.approvalStatus === 'Pending',
+                        "text-red-600 border-red-600 bg-red-50": pkg.approvalStatus === 'Rejected',
+                    })}>
+                      {pkg.approvalStatus}
+                    </Badge>
+                  </TableCell>
                   <TableCell>
                      <div className="flex items-center gap-2">
                         <Switch
                             id={`status-${pkg.id}`}
                             checked={packageStatus.get(pkg.id)}
                             onCheckedChange={() => handleStatusToggle(pkg.id)}
+                            disabled={pkg.approvalStatus !== 'Approved'}
                         />
                          <Badge variant={packageStatus.get(pkg.id) ? "default" : "secondary"}>
                            {packageStatus.get(pkg.id) ? "Active" : "Disabled"}

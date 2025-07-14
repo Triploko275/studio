@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -49,126 +50,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { packages as allPackages, destinations, testimonials, agents } from "@/lib/data";
 
-// Mock Data
-const packages = [
-  {
-    id: 1,
-    title: "Bangkok & Pattaya Discovery",
-    destination: "Thailand",
-    duration: "5 Days",
-    rating: 4.5,
-    price: "35,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "thailand beach",
-    isWishlisted: false,
-  },
-  {
-    id: 2,
-    title: "Enchanting Bali Getaway",
-    destination: "Indonesia",
-    duration: "7 Days",
-    rating: 4.8,
-    price: "45,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "bali temple",
-    isWishlisted: true,
-  },
-  {
-    id: 3,
-    title: "Highlights of Vietnam",
-    destination: "Vietnam",
-    duration: "6 Days",
-    rating: 4.6,
-    price: "42,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "vietnam landscape",
-    isWishlisted: false,
-  },
-  {
-    id: 4,
-    title: "Singapore City Spectacular",
-    destination: "Singapore",
-    duration: "4 Days",
-    rating: 4.7,
-    price: "55,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "singapore skyline",
-    isWishlisted: false,
-  },
-  {
-    id: 5,
-    title: "Malaysian Marvels",
-    destination: "Malaysia",
-    duration: "6 Days",
-    rating: 4.4,
-    price: "48,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "malaysia city",
-    isWishlisted: false,
-  },
-  {
-    id: 6,
-    title: "Colors of Sri Lanka",
-    destination: "Sri Lanka",
-    duration: "8 Days",
-    rating: 4.9,
-    price: "60,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "sri lanka tea plantation",
-    isWishlisted: false,
-  },
-  {
-    id: 7,
-    title: "Philippine Island Hopping",
-    destination: "Philippines",
-    duration: "10 Days",
-    rating: 4.8,
-    price: "75,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "philippines boat",
-    isWishlisted: false,
-  },
-  {
-    id: 8,
-    title: "Laos Heritage Trail",
-    destination: "Laos",
-    duration: "5 Days",
-    rating: 4.5,
-    price: "40,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "laos temple",
-    isWishlisted: false,
-  },
-];
-
-const destinations = ["All", "Thailand", "Vietnam", "Singapore", "Malaysia", "Indonesia", "Philippines", "Sri Lanka", "Laos"];
-
-const testimonials = [
-  {
-    id: 1,
-    name: "Anika Sharma",
-    avatar: "https://placehold.co/100x100.png",
-    hint: "woman smiling",
-    quote: "Booking through Roam Southeast was a breeze! We got an incredible deal for our Bali trip directly from the local operators. So much better than the usual markups.",
-  },
-  {
-    id: 2,
-    name: "Rohan Patel",
-    avatar: "https://placehold.co/100x100.png",
-    hint: "man travel",
-    quote: "The transparency is what I loved. I knew exactly who I was booking with in Thailand. The package was well-planned and everything was seamless. Highly recommended!",
-  },
-  {
-    id: 3,
-    name: "Priya Singh",
-    avatar: "https://placehold.co/100x100.png",
-    hint: "woman beach",
-    quote: "Found the perfect family package to Singapore. The ability to chat with the DMC on WhatsApp before booking was a fantastic feature. Will use again for sure.",
-  },
-];
-
-type Package = (typeof packages)[0];
+type Package = (typeof allPackages)[0];
 
 const AppHeader = () => (
   <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm">
@@ -199,59 +83,111 @@ export const PackageCard = ({
 }: {
   pkg: Package;
   onWishlistToggle: (id: number) => void;
-}) => (
-  <Card className="overflow-hidden border-none shadow-lg transition-transform duration-300 hover:scale-105">
-    <CardContent className="p-0">
-      <div className="relative">
-        <Image
-          src={pkg.image}
-          alt={pkg.title}
-          width={600}
-          height={400}
-          className="h-48 w-full object-cover"
-          data-ai-hint={pkg.hint}
-        />
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-2 right-2 rounded-full bg-background/70 hover:bg-background"
-          onClick={() => onWishlistToggle(pkg.id)}
-        >
-          <Heart
-            className={`h-5 w-5 ${
-              pkg.isWishlisted ? "text-primary fill-current" : "text-foreground"
-            }`}
-          />
-        </Button>
-      </div>
-      <div className="p-4">
-        <h3 className="font-headline text-lg font-bold truncate">{pkg.title}</h3>
-        <div className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <MapPin className="h-4 w-4" />
-            <span>{pkg.destination}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Clock className="h-4 w-4" />
-            <span>{pkg.duration}</span>
-          </div>
-        </div>
-        <div className="mt-4 flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <Star className="h-5 w-5 text-accent fill-current" />
-            <span className="font-bold">{pkg.rating}</span>
-          </div>
-          <div className="text-lg font-bold text-foreground">
-            <span className="text-sm font-normal">From ₹</span>
-            {pkg.price}
-          </div>
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-);
+}) => {
+    const agent = agents.find(a => a.id === pkg.agentId);
+    return (
+        <Card className="overflow-hidden border-none shadow-lg transition-transform duration-300 hover:scale-105 flex flex-col">
+            <CardContent className="p-0 flex flex-col flex-grow">
+            <div className="relative">
+                <Link href={`/packages/${pkg.id}`} passHref>
+                    <Image
+                        src={pkg.image}
+                        alt={pkg.title}
+                        width={600}
+                        height={400}
+                        className="h-48 w-full object-cover"
+                        data-ai-hint={pkg.hint}
+                    />
+                </Link>
+                <Button
+                variant="ghost"
+                size="icon"
+                className="absolute top-2 right-2 rounded-full bg-background/70 hover:bg-background"
+                onClick={() => onWishlistToggle(pkg.id)}
+                >
+                <Heart
+                    className={`h-5 w-5 ${
+                    pkg.isWishlisted ? "text-primary fill-current" : "text-foreground"
+                    }`}
+                />
+                </Button>
+            </div>
+            <div className="p-4 flex flex-col flex-grow">
+                <h3 className="font-headline text-lg font-bold truncate">{pkg.title}</h3>
+                <div className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                    <MapPin className="h-4 w-4" />
+                    <span>{pkg.destination}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                    <Clock className="h-4 w-4" />
+                    <span>{pkg.duration}</span>
+                </div>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                <div className="flex items-center gap-1">
+                    <Star className="h-5 w-5 text-accent fill-current" />
+                    <span className="font-bold">{pkg.rating}</span>
+                </div>
+                <div className="text-lg font-bold text-foreground">
+                    <span className="text-sm font-normal">From ₹</span>
+                    {pkg.price}
+                </div>
+                </div>
+                 <div className="border-t my-4"></div>
+                 <div className="flex items-center gap-3 mt-auto">
+                    {agent && (
+                        <Link href={`/agents/${agent.id}`} passHref>
+                            <Avatar className="w-10 h-10 border-2 border-primary">
+                                <AvatarImage src={agent.logo} data-ai-hint={agent.hint} />
+                                <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                        </Link>
+                    )}
+                    <div>
+                         <p className="font-semibold text-sm">{agent?.name}</p>
+                         <p className="text-xs text-muted-foreground">Tour Operator</p>
+                    </div>
+                </div>
+            </div>
+            </CardContent>
+        </Card>
+    );
+};
 
-export const FilterSheet = () => (
+export const FilterSheet = ({ onApplyFilters }: { onApplyFilters?: (filters: any) => void }) => {
+    const [destination, setDestination] = React.useState('all');
+    const [budget, setBudget] = React.useState([100000]);
+    const [duration, setDuration] = React.useState('any');
+    const [rating, setRating] = React.useState(1);
+
+    const handleApply = () => {
+        if (onApplyFilters) {
+            onApplyFilters({
+                destination,
+                budget: budget[0],
+                duration,
+                rating
+            });
+        }
+    }
+    
+    const handleClear = () => {
+        setDestination('all');
+        setBudget([100000]);
+        setDuration('any');
+        setRating(1);
+        if (onApplyFilters) {
+             onApplyFilters({
+                destination: 'all',
+                budget: 100000,
+                duration: 'any',
+                rating: 1
+            });
+        }
+    }
+
+  return (
   <Sheet>
     <SheetTrigger asChild>
       <Button variant="outline" className="gap-2 shrink-0">
@@ -269,13 +205,13 @@ export const FilterSheet = () => (
       <div className="grid gap-6 py-6">
         <div className="grid gap-3">
           <Label htmlFor="destination">Destination</Label>
-          <Select defaultValue="all">
+          <Select value={destination} onValueChange={setDestination}>
             <SelectTrigger id="destination">
               <SelectValue placeholder="Select a destination" />
             </SelectTrigger>
             <SelectContent>
               {destinations.map((dest) => (
-                <SelectItem key={dest} value={dest.toLowerCase()}>
+                <SelectItem key={dest} value={dest}>
                   {dest}
                 </SelectItem>
               ))}
@@ -283,21 +219,21 @@ export const FilterSheet = () => (
           </Select>
         </div>
         <div className="grid gap-3">
-          <Label htmlFor="budget">Budget (per person)</Label>
+          <Label htmlFor="budget">Budget (per person) - ₹{budget[0].toLocaleString()}</Label>
           <div className="flex justify-between text-sm text-muted-foreground">
             <span>₹10k</span>
             <span>₹1L+</span>
           </div>
-          <Slider defaultValue={[40000]} max={100000} min={10000} step={1000} />
+          <Slider value={budget} onValueChange={setBudget} max={100000} min={10000} step={1000} />
         </div>
         <div className="grid gap-3">
           <Label>Duration</Label>
-          <RadioGroup defaultValue="any" className="flex flex-wrap gap-2">
-            {['Any', '1-3 Days', '4-6 Days', '7+ Days'].map(d => (
+          <RadioGroup value={duration} onValueChange={setDuration} className="flex flex-wrap gap-2">
+            {['any', '1-3', '4-6', '7+'].map(d => (
               <div key={d} className="flex items-center">
-                <RadioGroupItem value={d.toLowerCase().replace(' ','-')} id={`d-${d}`} className="sr-only" />
-                <Label htmlFor={`d-${d}`} className="border rounded-full px-4 py-2 cursor-pointer has-[[data-state=checked]]:bg-primary has-[[data-state=checked]]:text-primary-foreground has-[[data-state=checked]]:border-primary">
-                  {d}
+                <RadioGroupItem value={d} id={`d-${d}`} className="sr-only" />
+                <Label htmlFor={`d-${d}`} className="border rounded-full px-4 py-2 cursor-pointer has-[[data-state=checked]]:bg-primary has-[[data-state=checked]]:text-primary-foreground has-[[data-state=checked]]:border-primary capitalize">
+                  {d === 'any' ? 'Any' : (d === '7+' ? '7+ Days' : `${d} Days`)}
                 </Label>
               </div>
             ))}
@@ -305,32 +241,52 @@ export const FilterSheet = () => (
         </div>
         <div className="grid gap-3">
           <Label>Rating</Label>
-          <div className="flex gap-2">
+           <div className="flex gap-2">
             {[...Array(5)].map((_, i) => (
-                <Star key={i} className={`h-8 w-8 ${i < 4 ? 'text-accent fill-current' : 'text-muted'}`} />
+                <Star key={i} onClick={() => setRating(i + 1)} className={`h-8 w-8 cursor-pointer ${i < rating ? 'text-accent fill-current' : 'text-muted'}`} />
             ))}
           </div>
         </div>
       </div>
       <SheetFooter>
-        <Button variant="ghost">Clear</Button>
-        <Button type="submit" className="flex-1">Apply Filters</Button>
+        <Button variant="ghost" onClick={handleClear}>Clear</Button>
+        <SheetClose asChild>
+            <Button type="submit" className="flex-1" onClick={handleApply}>Apply Filters</Button>
+        </SheetClose>
       </SheetFooter>
     </SheetContent>
   </Sheet>
-);
+  )
+};
 
 export default function Home() {
-  const [packageList, setPackageList] = React.useState<Package[]>(packages);
+  const [packageList, setPackageList] = React.useState<Package[]>(allPackages.slice(0, 4));
   const [activeDestination, setActiveDestination] = React.useState("All");
+  
+  // State to manage wishlisted items
+  const [wishlist, setWishlist] = React.useState(
+      new Set(allPackages.filter(p => p.isWishlisted).map(p => p.id))
+  );
 
   const handleWishlistToggle = (id: number) => {
-    setPackageList((prev) =>
-      prev.map((pkg) =>
-        pkg.id === id ? { ...pkg, isWishlisted: !pkg.isWishlisted } : pkg
-      )
-    );
+      setWishlist(prev => {
+          const newWishlist = new Set(prev);
+          if (newWishlist.has(id)) {
+              newWishlist.delete(id);
+          } else {
+              newWishlist.add(id);
+          }
+          return newWishlist;
+      });
   };
+
+  React.useEffect(() => {
+    if (activeDestination === "All") {
+      setPackageList(allPackages.slice(0, 4));
+    } else {
+      setPackageList(allPackages.filter(p => p.destination === activeDestination));
+    }
+  }, [activeDestination]);
 
   return (
     <div className="bg-background text-foreground">
@@ -381,10 +337,10 @@ export default function Home() {
                 </Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {packageList.slice(0, 2).map((pkg) => (
+                {packageList.map((pkg) => (
                   <PackageCard
                     key={pkg.id}
-                    pkg={pkg}
+                    pkg={{...pkg, isWishlisted: wishlist.has(pkg.id)}}
                     onWishlistToggle={handleWishlistToggle}
                   />
                 ))}
@@ -441,3 +397,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

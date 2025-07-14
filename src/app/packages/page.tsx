@@ -1,105 +1,15 @@
+
 "use client";
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowLeft, Map, Heart, UserRound } from "lucide-react";
+import { ArrowLeft, Heart, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { PackageCard, FilterSheet } from "@/app/page";
+import { packages as allPackages, destinations } from "@/lib/data";
 
-// Mock Data - In a real app, this would likely come from a shared service or API
-const packages = [
-  {
-    id: 1,
-    title: "Bangkok & Pattaya Discovery",
-    destination: "Thailand",
-    duration: "5 Days",
-    rating: 4.5,
-    price: "35,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "thailand beach",
-    isWishlisted: false,
-  },
-  {
-    id: 2,
-    title: "Enchanting Bali Getaway",
-    destination: "Indonesia",
-    duration: "7 Days",
-    rating: 4.8,
-    price: "45,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "bali temple",
-    isWishlisted: true,
-  },
-  {
-    id: 3,
-    title: "Highlights of Vietnam",
-    destination: "Vietnam",
-    duration: "6 Days",
-    rating: 4.6,
-    price: "42,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "vietnam landscape",
-    isWishlisted: false,
-  },
-  {
-    id: 4,
-    title: "Singapore City Spectacular",
-    destination: "Singapore",
-    duration: "4 Days",
-    rating: 4.7,
-    price: "55,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "singapore skyline",
-    isWishlisted: false,
-  },
-  {
-    id: 5,
-    title: "Malaysian Marvels",
-    destination: "Malaysia",
-    duration: "6 Days",
-    rating: 4.4,
-    price: "48,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "malaysia city",
-    isWishlisted: false,
-  },
-  {
-    id: 6,
-    title: "Colors of Sri Lanka",
-    destination: "Sri Lanka",
-    duration: "8 Days",
-    rating: 4.9,
-    price: "60,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "sri lanka tea plantation",
-    isWishlisted: false,
-  },
-  {
-    id: 7,
-    title: "Philippine Island Hopping",
-    destination: "Philippines",
-    duration: "10 Days",
-    rating: 4.8,
-    price: "75,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "philippines boat",
-    isWishlisted: false,
-  },
-  {
-    id: 8,
-    title: "Laos Heritage Trail",
-    destination: "Laos",
-    duration: "5 Days",
-    rating: 4.5,
-    price: "40,000",
-    image: "https://placehold.co/600x400.png",
-    hint: "laos temple",
-    isWishlisted: false,
-  },
-];
-
-type Package = (typeof packages)[0];
+type Package = (typeof allPackages)[0];
 
 const PackagesHeader = () => (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm">
@@ -129,15 +39,53 @@ const PackagesHeader = () => (
 
 
 export default function AllPackagesPage() {
-  const [packageList, setPackageList] = React.useState<Package[]>(packages);
-
-  const handleWishlistToggle = (id: number) => {
-    setPackageList((prev) =>
-      prev.map((pkg) =>
-        pkg.id === id ? { ...pkg, isWishlisted: !pkg.isWishlisted } : pkg
-      )
+    const [packageList, setPackageList] = React.useState<Package[]>(allPackages);
+    const [filters, setFilters] = React.useState({
+        destination: "all",
+        budget: 100000,
+        duration: "any",
+        rating: 1,
+    });
+    
+    // State to manage wishlisted items
+    const [wishlist, setWishlist] = React.useState(
+        new Set(allPackages.filter(p => p.isWishlisted).map(p => p.id))
     );
-  };
+
+    const handleWishlistToggle = (id: number) => {
+        setWishlist(prev => {
+            const newWishlist = new Set(prev);
+            if (newWishlist.has(id)) {
+                newWishlist.delete(id);
+            } else {
+                newWishlist.add(id);
+            }
+            return newWishlist;
+        });
+    };
+    
+    const applyFilters = (newFilters: any) => {
+        setFilters(newFilters);
+        let filtered = allPackages;
+
+        if (newFilters.destination !== 'all') {
+            filtered = filtered.filter(p => p.destination === newFilters.destination);
+        }
+        filtered = filtered.filter(p => parseInt(p.price.replace(/,/g, '')) <= newFilters.budget);
+
+        if (newFilters.duration !== 'any') {
+            const [min, max] = newFilters.duration.split('-').map(Number);
+            filtered = filtered.filter(p => {
+                const duration = parseInt(p.duration);
+                if(newFilters.duration === '7+') return duration >= 7;
+                return duration >= min && duration <= max;
+            });
+        }
+        
+        filtered = filtered.filter(p => p.rating >= newFilters.rating);
+
+        setPackageList(filtered);
+    }
 
   return (
     <div className="bg-background text-foreground">
@@ -149,13 +97,13 @@ export default function AllPackagesPage() {
                 <h2 className="text-lg font-bold font-headline">
                   {packageList.length} Packages Found
                 </h2>
-                <FilterSheet />
+                <FilterSheet onApplyFilters={applyFilters} />
               </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {packageList.map((pkg) => (
                 <PackageCard
                   key={pkg.id}
-                  pkg={pkg}
+                  pkg={{...pkg, isWishlisted: wishlist.has(pkg.id)}}
                   onWishlistToggle={handleWishlistToggle}
                 />
               ))}
@@ -166,3 +114,5 @@ export default function AllPackagesPage() {
     </div>
   );
 }
+
+    

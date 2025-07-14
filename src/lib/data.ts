@@ -1,0 +1,154 @@
+
+export const packages = [
+  {
+    id: 1,
+    title: "Bangkok & Pattaya Discovery",
+    destination: "Thailand",
+    duration: "5 Days",
+    rating: 4.5,
+    price: "35,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "thailand beach",
+    isWishlisted: false,
+    agentId: 1,
+  },
+  {
+    id: 2,
+    title: "Enchanting Bali Getaway",
+    destination: "Indonesia",
+    duration: "7 Days",
+    rating: 4.8,
+    price: "45,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "bali temple",
+    isWishlisted: true,
+    agentId: 2,
+  },
+  {
+    id: 3,
+    title: "Highlights of Vietnam",
+    destination: "Vietnam",
+    duration: "6 Days",
+    rating: 4.6,
+    price: "42,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "vietnam landscape",
+    isWishlisted: false,
+    agentId: 3,
+  },
+  {
+    id: 4,
+    title: "Singapore City Spectacular",
+    destination: "Singapore",
+    duration: "4 Days",
+    rating: 4.7,
+    price: "55,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "singapore skyline",
+    isWishlisted: false,
+    agentId: 4,
+  },
+  {
+    id: 5,
+    title: "Malaysian Marvels",
+    destination: "Malaysia",
+    duration: "6 Days",
+    rating: 4.4,
+    price: "48,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "malaysia city",
+    isWishlisted: false,
+    agentId: 2,
+  },
+  {
+    id: 6,
+    title: "Colors of Sri Lanka",
+    destination: "Sri Lanka",
+    duration: "8 Days",
+    rating: 4.9,
+    price: "60,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "sri lanka tea plantation",
+    isWishlisted: false,
+    agentId: 4,
+  },
+  {
+    id: 7,
+    title: "Philippine Island Hopping",
+    destination: "Philippines",
+    duration: "10 Days",
+    rating: 4.8,
+    price: "75,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "philippines boat",
+    isWishlisted: false,
+    agentId: 3,
+  },
+  {
+    id: 8,
+    title: "Laos Heritage Trail",
+    destination: "Laos",
+    duration: "5 Days",
+    rating: 4.5,
+    price: "40,000",
+    image: "https://placehold.co/600x400.png",
+    hint: "laos temple",
+    isWishlisted: false,
+    agentId: 1,
+  },
+];
+
+export const destinations = ["All", "Thailand", "Vietnam", "Singapore", "Malaysia", "Indonesia", "Philippines", "Sri Lanka", "Laos"];
+
+export const testimonials = [
+  {
+    id: 1,
+    name: "Anika Sharma",
+    avatar: "https://placehold.co/100x100.png",
+    hint: "woman smiling",
+    quote: "Booking through Roam Southeast was a breeze! We got an incredible deal for our Bali trip directly from the local operators. So much better than the usual markups.",
+  },
+  {
+    id: 2,
+    name: "Rohan Patel",
+    avatar: "https://placehold.co/100x100.png",
+    hint: "man travel",
+    quote: "The transparency is what I loved. I knew exactly who I was booking with in Thailand. The package was well-planned and everything was seamless. Highly recommended!",
+  },
+  {
+    id: 3,
+    name: "Priya Singh",
+    avatar: "https://placehold.co/100x100.png",
+    hint: "woman beach",
+    quote: "Found the perfect family package to Singapore. The ability to chat with the DMC on WhatsApp before booking was a fantastic feature. Will use again for sure.",
+  },
+];
+
+export const agents = [
+    {
+        id: 1,
+        name: "Siam Adventures",
+        logo: "https://placehold.co/100x100.png",
+        hint: "company logo"
+    },
+    {
+        id: 2,
+        name: "Bali Horizons",
+        logo: "https://placehold.co/100x100.png",
+        hint: "travel company"
+    },
+    {
+        id: 3,
+        name: "Indochina Trails",
+        logo: "https://placehold.co/100x100.png",
+        hint: "logo travel"
+    },
+    {
+        id: 4,
+        name: "Lanka Pearl Tours",
+        logo: "https://placehold.co/100x100.png",
+        hint: "tour company"
+    }
+];
+
+    

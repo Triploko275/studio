@@ -61,10 +61,9 @@ import { packages as allPackages, destinations, testimonials, agents } from "@/l
 import { usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
 import { LoginDialog } from "@/components/auth/login-dialog";
-import { Badge } from "@/components/ui/badge";
+import { AgentCard } from "@/components/agent-card";
 
 type Package = (typeof allPackages)[0];
-type Agent = (typeof agents)[0];
 
 const AppHeader = () => (
   <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm">
@@ -168,28 +167,6 @@ export const PackageCard = ({
     );
 };
 
-
-const AgentCard = ({ agent }: { agent: Agent }) => {
-    return (
-        <Link href={`/agents/${agent.id}`} passHref>
-            <Card className="overflow-hidden border-none shadow-lg transition-transform duration-300 hover:scale-105 flex flex-col h-full">
-                <CardContent className="p-4 flex flex-col flex-grow items-center text-center">
-                    <Avatar className="w-20 h-20 mb-4 border-4 border-primary">
-                        <AvatarImage src={agent.logo} data-ai-hint={agent.hint} />
-                        <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <h3 className="font-headline text-lg font-bold">{agent.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{agent.specialty}</p>
-                    <div className="flex items-center gap-1 mt-2">
-                        <Star className="h-5 w-5 text-accent fill-current" />
-                        <span className="font-bold">{agent.rating}</span>
-                        <span className="text-sm text-muted-foreground ml-1">({agent.reviews} reviews)</span>
-                    </div>
-                </CardContent>
-            </Card>
-        </Link>
-    );
-};
 
 export const FilterSheet = ({ onApplyFilters }: { onApplyFilters?: (filters: any) => void }) => {
     const [destination, setDestination] = React.useState('all');
@@ -435,9 +412,12 @@ export default function Home() {
 
              <section className="bg-muted py-12 px-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold font-headline text-center w-full">
+                <h3 className="text-xl font-bold font-headline">
                   Top Travel Agents
                 </h3>
+                 <Link href="/agents" className="text-sm font-medium text-primary hover:underline">
+                  See all
+                </Link>
               </div>
               <Carousel
                 opts={{

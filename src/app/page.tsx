@@ -192,7 +192,7 @@ export const PackageCard = ({
 
 
 export const FilterSheet = ({ onApplyFilters }: { onApplyFilters?: (filters: any) => void }) => {
-    const [destination, setDestination] = React.useState('all');
+    const [destination, setDestination] = React.useState('All');
     const [budget, setBudget] = React.useState([100000]);
     const [duration, setDuration] = React.useState('any');
     const [rating, setRating] = React.useState(1);
@@ -209,13 +209,13 @@ export const FilterSheet = ({ onApplyFilters }: { onApplyFilters?: (filters: any
     }
     
     const handleClear = () => {
-        setDestination('all');
+        setDestination('All');
         setBudget([100000]);
         setDuration('any');
         setRating(1);
         if (onApplyFilters) {
              onApplyFilters({
-                destination: 'all',
+                destination: 'All',
                 budget: 100000,
                 duration: 'any',
                 rating: 1
@@ -247,8 +247,8 @@ export const FilterSheet = ({ onApplyFilters }: { onApplyFilters?: (filters: any
             </SelectTrigger>
             <SelectContent>
               {destinations.map((dest) => (
-                <SelectItem key={dest} value={dest}>
-                  {dest}
+                <SelectItem key={dest.name} value={dest.name}>
+                  {dest.name}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -387,7 +387,7 @@ export default function Home() {
               </div>
             </section>
 
-            <section className="px-6 pb-6">
+            <section className="px-2 pb-6">
                <Carousel
                 opts={{
                   align: "start",
@@ -395,21 +395,41 @@ export default function Home() {
                 }}
                 className="w-full"
               >
-                <CarouselContent className="-ml-2">
+                <CarouselContent>
                   {destinations.map((dest) => (
-                    <CarouselItem key={dest} className="basis-auto pl-2">
-                      <Button
-                        variant={activeDestination === dest ? "default" : "secondary"}
-                        className="rounded-full"
-                        onClick={() => setActiveDestination(dest)}
+                    <CarouselItem key={dest.name} className="basis-1/4 sm:basis-1/5 lg:basis-1/6">
+                      <div 
+                        className="flex flex-col items-center gap-2 cursor-pointer group"
+                        onClick={() => setActiveDestination(dest.name)}
                       >
-                        {dest}
-                      </Button>
+                         <div className={cn(
+                           "relative w-20 h-20 rounded-full overflow-hidden transition-all duration-300 group-hover:scale-105 ring-2 ring-transparent",
+                           activeDestination === dest.name ? 'ring-primary' : 'ring-border'
+                         )}>
+                            <Image
+                                src={dest.image}
+                                alt={dest.name}
+                                fill
+                                objectFit="cover"
+                                className="transition-transform duration-300 group-hover:scale-110"
+                                data-ai-hint={dest.hint}
+                            />
+                             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors"></div>
+                        </div>
+                        <p className={cn(
+                          "text-sm font-medium transition-colors",
+                          activeDestination === dest.name ? 'text-primary' : 'text-muted-foreground'
+                        )}>
+                          {dest.name}
+                        </p>
+                      </div>
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 z-10 hidden sm:flex" />
-                <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 z-10 hidden sm:flex" />
+                <div className="hidden sm:block">
+                  <CarouselPrevious className="absolute left-[-10px] top-1/3 -translate-y-1/2 z-10" />
+                  <CarouselNext className="absolute right-[-10px] top-1/3 -translate-y-1/2 z-10" />
+                </div>
               </Carousel>
             </section>
 

@@ -107,7 +107,17 @@ export const packages = [
   },
 ];
 
-export const destinations = ["All", "Thailand", "Vietnam", "Singapore", "Malaysia", "Indonesia", "Philippines", "Sri Lanka", "Laos"];
+export const destinations = [
+  { name: "All", image: "https://placehold.co/100x100.png", hint: "world map" },
+  { name: "Thailand", image: "https://placehold.co/100x100.png", hint: "thailand beach" },
+  { name: "Vietnam", image: "https://placehold.co/100x100.png", hint: "vietnam landscape" },
+  { name: "Singapore", image: "https://placehold.co/100x100.png", hint: "singapore skyline" },
+  { name: "Malaysia", image: "https://placehold.co/100x100.png", hint: "malaysia city" },
+  { name: "Indonesia", image: "https://placehold.co/100x100.png", hint: "bali temple" },
+  { name: "Philippines", image: "https://placehold.co/100x100.png", hint: "philippines boat" },
+  { name: "Sri Lanka", image: "https://placehold.co/100x100.png", hint: "sri lanka tea plantation" },
+  { name: "Laos", image: "https://placehold.co/100x100.png", hint: "laos temple" },
+];
 
 export const testimonials = [
   {

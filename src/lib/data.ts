@@ -141,6 +141,11 @@ export const agents = [
         hint: "company logo",
         rating: 4.8,
         reviews: 120,
+        specialty: "Thailand & Laos",
+        phone: "+66 2 123 4567",
+        email: "contact@siamadventures.com",
+        website: "siamadventures.com",
+        description: "Siam Adventures is a premier tour operator in Thailand, offering unforgettable experiences from the bustling streets of Bangkok to the serene temples of Chiang Mai. We pride ourselves on authentic local guides and personalized service.",
     },
     {
         id: 2,
@@ -149,6 +154,11 @@ export const agents = [
         hint: "travel company",
         rating: 4.9,
         reviews: 250,
+        specialty: "Indonesia & Malaysia",
+        phone: "+62 361 987 654",
+        email: "info@balihorizons.com",
+        website: "balihorizons.com",
+        description: "Explore the magic of the Indonesian archipelago with Bali Horizons. From stunning beaches to ancient temples, our expert team curates journeys that capture the heart and soul of Southeast Asia.",
     },
     {
         id: 3,
@@ -157,6 +167,11 @@ export const agents = [
         hint: "logo travel",
         rating: 4.7,
         reviews: 180,
+        specialty: "Vietnam & Philippines",
+        phone: "+84 24 555 8888",
+        email: "support@indochinatrails.com",
+        website: "indochinatrails.com",
+        description: "Discover the rich history and vibrant cultures of Vietnam and the Philippines with Indochina Trails. Our tours are designed to be immersive, educational, and breathtakingly beautiful.",
     },
     {
         id: 4,
@@ -165,7 +180,10 @@ export const agents = [
         hint: "tour company",
         rating: 4.9,
         reviews: 95,
+        specialty: "Sri Lanka & Singapore",
+        phone: "+94 11 222 3333",
+        email: "bookings@lankapearl.com",
+        website: "lankapearl.com",
+        description: "Experience the teardrop island of Sri Lanka like never before. Lanka Pearl Tours offers bespoke itineraries covering ancient cities, lush tea plantations, and stunning coastlines.",
     }
 ];
-
-    

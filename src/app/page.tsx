@@ -15,7 +15,8 @@ import {
   Clock,
   Home as HomeIcon,
   Briefcase,
-  Gem
+  Gem,
+  Bell
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -60,8 +61,10 @@ import { packages as allPackages, destinations, testimonials, agents } from "@/l
 import { usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
 import { LoginDialog } from "@/components/auth/login-dialog";
+import { Badge } from "@/components/ui/badge";
 
 type Package = (typeof allPackages)[0];
+type Agent = (typeof agents)[0];
 
 const AppHeader = () => (
   <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm">
@@ -73,12 +76,10 @@ const AppHeader = () => (
         </h1>
       </Link>
       <div className="flex items-center gap-4">
-        <Link href="/shortlist">
-          <Button variant="ghost" size="icon">
-            <Heart className="h-5 w-5" />
-            <span className="sr-only">Wishlist</span>
-          </Button>
-        </Link>
+        <Button variant="ghost" size="icon">
+          <Bell className="h-5 w-5" />
+          <span className="sr-only">Notifications</span>
+        </Button>
         <LoginDialog />
       </div>
     </div>
@@ -97,7 +98,7 @@ export const PackageCard = ({
         <Card className="overflow-hidden border-none shadow-lg transition-transform duration-300 hover:scale-105 flex flex-col">
             <CardContent className="p-0 flex flex-col flex-grow">
             <div className="relative">
-                <Link href={`/packages/${pkg.slug}`} passHref>
+                <Link href={`/packages/${pkg.id}`} passHref>
                     <Image
                         src={pkg.image}
                         alt={pkg.title}
@@ -164,6 +165,29 @@ export const PackageCard = ({
             </div>
             </CardContent>
         </Card>
+    );
+};
+
+
+const AgentCard = ({ agent }: { agent: Agent }) => {
+    return (
+        <Link href={`/agents/${agent.id}`} passHref>
+            <Card className="overflow-hidden border-none shadow-lg transition-transform duration-300 hover:scale-105 flex flex-col h-full">
+                <CardContent className="p-4 flex flex-col flex-grow items-center text-center">
+                    <Avatar className="w-20 h-20 mb-4 border-4 border-primary">
+                        <AvatarImage src={agent.logo} data-ai-hint={agent.hint} />
+                        <AvatarFallback>{agent.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <h3 className="font-headline text-lg font-bold">{agent.name}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{agent.specialty}</p>
+                    <div className="flex items-center gap-1 mt-2">
+                        <Star className="h-5 w-5 text-accent fill-current" />
+                        <span className="font-bold">{agent.rating}</span>
+                        <span className="text-sm text-muted-foreground ml-1">({agent.reviews} reviews)</span>
+                    </div>
+                </CardContent>
+            </Card>
+        </Link>
     );
 };
 
@@ -334,6 +358,13 @@ export default function Home() {
     }
   }, [activeDestination]);
 
+  const filteredAgents = React.useMemo(() => {
+    if (activeDestination === "All") {
+      return agents;
+    }
+    return agents.filter(agent => agent.specialty.includes(activeDestination));
+  }, [activeDestination]);
+
   return (
     <div className="bg-background text-foreground">
       <div className="mx-auto max-w-2xl">
@@ -402,7 +433,34 @@ export default function Home() {
               </div>
             </section>
 
-            <section className="bg-muted py-12 px-6">
+             <section className="bg-muted py-12 px-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold font-headline text-center w-full">
+                  Top Travel Agents
+                </h3>
+              </div>
+              <Carousel
+                opts={{
+                  align: "start",
+                  dragFree: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent className="-ml-4">
+                  {filteredAgents.map((agent) => (
+                    <CarouselItem key={agent.id} className="basis-full sm:basis-1/2 lg:basis-1/3 pl-4">
+                      <AgentCard agent={agent} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                 <div className="hidden sm:block">
+                    <CarouselPrevious className="left-[-10px]" />
+                    <CarouselNext className="right-[-10px]" />
+                </div>
+              </Carousel>
+            </section>
+
+            <section className="py-12 px-6">
                <h3 className="text-xl font-bold font-headline text-center mb-6">
                 What Our Travelers Say
               </h3>

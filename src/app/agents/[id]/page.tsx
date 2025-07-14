@@ -1,8 +1,9 @@
+
 import * as React from "react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { packages as allPackages, agents } from "@/lib/data";
+import { packages, agents as allAgents } from "@/lib/data";
 import { AgentPageClientContent } from "./client-page";
 
 const AgentHeader = () => (
@@ -24,8 +25,8 @@ const AgentHeader = () => (
 
 export default function AgentProfilePage({ params }: { params: { id: string } }) {
     const agentId = parseInt(params.id, 10);
-    const agent = agents.find(a => a.id === agentId);
-    const agentPackages = allPackages.filter(p => p.agentId === agentId);
+    const agent = allAgents.find(a => a.id === agentId);
+    const agentPackages = packages.filter(p => p.agentId === agentId);
 
     if (!agent) {
         return (

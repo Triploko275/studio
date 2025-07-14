@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Map,
   Heart,
@@ -128,12 +129,12 @@ type Package = (typeof packages)[0];
 const AppHeader = () => (
   <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm">
     <div className="mx-auto flex max-w-2xl items-center justify-between p-4">
-      <div className="flex items-center gap-2">
+      <Link href="/" className="flex items-center gap-2">
         <Map className="h-7 w-7 text-primary" />
         <h1 className="text-xl font-bold text-foreground font-headline">
           Roam Southeast
         </h1>
-      </div>
+      </Link>
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon">
           <Heart className="h-5 w-5" />
@@ -148,7 +149,7 @@ const AppHeader = () => (
   </header>
 );
 
-const PackageCard = ({
+export const PackageCard = ({
   pkg,
   onWishlistToggle,
 }: {
@@ -206,7 +207,7 @@ const PackageCard = ({
   </Card>
 );
 
-const FilterSheet = () => (
+export const FilterSheet = () => (
   <Sheet>
     <SheetTrigger asChild>
       <Button variant="outline" className="gap-2 shrink-0">
@@ -331,10 +332,12 @@ export default function Home() {
                 <h3 className="text-xl font-bold font-headline">
                   Popular Packages
                 </h3>
-                <FilterSheet />
+                <Link href="/packages" className="text-sm font-medium text-primary hover:underline">
+                  See all
+                </Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {packageList.map((pkg) => (
+                {packageList.slice(0, 2).map((pkg) => (
                   <PackageCard
                     key={pkg.id}
                     pkg={pkg}

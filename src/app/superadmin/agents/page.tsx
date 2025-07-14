@@ -2,6 +2,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
     Card,
     CardContent,
@@ -112,8 +113,12 @@ export default function SuperAdminAgentsPage() {
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                                <DropdownMenuItem onSelect={() => toast({ title: "Navigating to agent's details..."})}>View Details</DropdownMenuItem>
-                                                <DropdownMenuItem onSelect={() => toast({ title: "Viewing all agent packages..."})}>View Packages</DropdownMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                    <Link href={`/agents/${agent.id}`}>View Details</Link>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                    <Link href={`/agents/${agent.id}`}>View Packages</Link>
+                                                </DropdownMenuItem>
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuLabel>KYC</DropdownMenuLabel>
                                                 <DropdownMenuItem onSelect={() => handleKycStatusChange(agent.id, 'Verified')}>Approve KYC</DropdownMenuItem>

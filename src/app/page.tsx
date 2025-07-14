@@ -13,8 +13,9 @@ import {
   Star,
   MapPin,
   Clock,
-  ChevronRight,
-  ChevronLeft,
+  Home as HomeIcon,
+  Briefcase,
+  Gem
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,11 @@ import {
   SheetTrigger,
   SheetFooter,
   SheetDescription,
+<<<<<<< HEAD
   SheetClose,
+=======
+  SheetClose
+>>>>>>> a719621 (in the home page, can we get these at bottom , ( Home, My trips, Shortli)
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -52,6 +57,8 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { packages as allPackages, destinations, testimonials, agents } from "@/lib/data";
+import { usePathname } from 'next/navigation';
+import { cn } from "@/lib/utils";
 
 type Package = (typeof allPackages)[0];
 
@@ -65,10 +72,12 @@ const AppHeader = () => (
         </h1>
       </Link>
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon">
-          <Heart className="h-5 w-5" />
-          <span className="sr-only">Wishlist</span>
-        </Button>
+        <Link href="/shortlist">
+          <Button variant="ghost" size="icon">
+            <Heart className="h-5 w-5" />
+            <span className="sr-only">Wishlist</span>
+          </Button>
+        </Link>
         <Button variant="ghost" size="icon">
           <UserRound className="h-5 w-5" />
           <span className="sr-only">Profile</span>
@@ -264,11 +273,45 @@ export const FilterSheet = ({ onApplyFilters }: { onApplyFilters?: (filters: any
   )
 };
 
+export const BottomNavBar = () => {
+    const pathname = usePathname();
+
+    const navItems = [
+        { href: "/", icon: HomeIcon, label: "Home" },
+        { href: "/my-trips", icon: Briefcase, label: "My Trips" },
+        { href: "/shortlist", icon: Heart, label: "Shortlist" },
+        { href: "/honeymoon", icon: Gem, label: "Honeymoon" },
+    ];
+
+    return (
+        <footer className="fixed bottom-0 left-0 right-0 w-full bg-background/80 backdrop-blur-sm border-t md:hidden">
+            <div className="mx-auto max-w-2xl">
+                <div className="flex justify-around items-center p-2">
+                    {navItems.map((item) => {
+                        const isActive = pathname === item.href;
+                        return (
+                            <Link href={item.href} key={item.label} passHref>
+                                <div className={cn(
+                                    "flex flex-col items-center justify-center gap-1 w-20 h-16 rounded-lg transition-colors",
+                                    isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                                )}>
+                                    <item.icon className="h-6 w-6" />
+                                    <span className="text-xs font-medium">{item.label}</span>
+                                </div>
+                            </Link>
+                        )
+                    })}
+                </div>
+            </div>
+        </footer>
+    );
+};
+
+
 export default function Home() {
   const [packageList, setPackageList] = React.useState<Package[]>(allPackages.slice(0, 4));
   const [activeDestination, setActiveDestination] = React.useState("All");
   
-  // State to manage wishlisted items
   const [wishlist, setWishlist] = React.useState(
       new Set(allPackages.filter(p => p.isWishlisted).map(p => p.id))
   );
@@ -298,7 +341,7 @@ export default function Home() {
       <div className="mx-auto max-w-2xl">
         <div className="flex min-h-screen w-full flex-col">
           <AppHeader />
-          <main className="flex-1 overflow-y-auto">
+          <main className="flex-1 overflow-y-auto pb-24">
             <section className="p-6 text-center">
               <h2 className="text-3xl font-bold font-headline tracking-tight">
                 Your Southeast Asian Adventure Awaits
@@ -386,17 +429,19 @@ export default function Home() {
                 </div>
               </Carousel>
             </section>
+            
+             <footer className="p-6 text-center text-sm text-muted-foreground hidden md:block">
+                <div className="flex justify-center gap-6 mb-4">
+                    <a href="#" className="hover:text-primary">About Us</a>
+                    <a href="#" className="hover:text-primary">Contact</a>
+                    <a href="#" className="hover:text-primary">Terms & Conditions</a>
+                    <a href="#" className="hover:text-primary">Privacy Policy</a>
+                </div>
+                <p>&copy; {new Date().getFullYear()} Roam Southeast. All rights reserved.</p>
+             </footer>
           </main>
 
-          <footer className="p-6 text-center text-sm text-muted-foreground">
-            <div className="flex justify-center gap-6 mb-4">
-                <a href="#" className="hover:text-primary">About Us</a>
-                <a href="#" className="hover:text-primary">Contact</a>
-                <a href="#" className="hover:text-primary">Terms & Conditions</a>
-                <a href="#" className="hover:text-primary">Privacy Policy</a>
-            </div>
-            <p>&copy; {new Date().getFullYear()} Roam Southeast. All rights reserved.</p>
-          </footer>
+          <BottomNavBar />
         </div>
       </div>
     </div>

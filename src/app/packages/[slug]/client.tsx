@@ -189,7 +189,12 @@ export function PackageDetailsClient({ pkg, agent }: { pkg: Package, agent: Agen
                         src={src}
                         alt={`${pkg.title} gallery image ${index + 1}`}
                         fill
+<<<<<<< HEAD:src/app/packages/[slug]/client.tsx
                         className="w-full object-cover"
+=======
+                        objectFit="cover"
+                        className="w-full"
+>>>>>>> a719621 (in the home page, can we get these at bottom , ( Home, My trips, Shortli):src/app/packages/[id]/page.tsx
                         data-ai-hint={`${pkg.hint} ${index % 2 === 0 ? 'scenery' : 'activity'}`}
                       />
                     </div>

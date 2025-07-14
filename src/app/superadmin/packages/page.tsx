@@ -57,14 +57,15 @@ export default function SuperAdminPackagesPage() {
     };
 
     const handleFeatureToggle = (pkgId: number) => {
-        setPackageList(prev => {
-            const pkg = prev.find(p => p.id === pkgId);
-            if(pkg) {
-                 toast({ title: `Package ${pkg.isFeatured ? 'un-featured' : 'featured'}!` });
-                 return prev.map(p => p.id === pkgId ? { ...p, isFeatured: !p.isFeatured } : p);
-            }
-            return prev;
-        });
+        const pkg = packageList.find(p => p.id === pkgId);
+        if (pkg) {
+            toast({ title: `Package ${pkg.isFeatured ? 'un-featured' : 'featured'}!` });
+            setPackageList(prev => 
+                prev.map(p => 
+                    p.id === pkgId ? { ...p, isFeatured: !p.isFeatured } : p
+                )
+            );
+        }
     };
 
     return (

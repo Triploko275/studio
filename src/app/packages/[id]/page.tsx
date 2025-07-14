@@ -4,7 +4,7 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Check, Clock, Heart, MapPin, MessageSquare, Send, Share2, Star, User, Users, X } from "lucide-react";
+import { ArrowLeft, Check, Clock, Heart, MessageSquare, Send, Share2, Star, User, Users, X, ShieldCheck, Tag } from "lucide-react";
 import { packages as allPackages, agents, testimonials } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -29,20 +29,16 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useParams } from "next/navigation";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 
-const PackageHeader = ({ title, pkg }: { title: string, pkg: any }) => {
-    const [isWishlisted, setIsWishlisted] = React.useState(pkg.isWishlisted);
-    const { toast } = useToast();
-
-    const handleWishlistToggle = () => {
-        setIsWishlisted(!isWishlisted);
-        toast({
-            title: isWishlisted ? "Removed from Wishlist" : "Added to Wishlist",
-            description: `"${pkg.title}" has been ${isWishlisted ? 'removed from' : 'added to'} your wishlist.`,
-        });
-    };
-    
+const PackageHeader = ({ title }: { title: string }) => {
     return (
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex max-w-4xl items-center justify-between p-4">
@@ -55,16 +51,7 @@ const PackageHeader = ({ title, pkg }: { title: string, pkg: any }) => {
           <h1 className="truncate text-xl font-bold text-foreground font-headline">
             {title}
           </h1>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={handleWishlistToggle}>
-              <Heart className={`h-5 w-5 ${isWishlisted ? 'text-primary fill-current' : ''}`} />
-              <span className="sr-only">Wishlist</span>
-            </Button>
-            <Button variant="ghost" size="icon">
-              <Share2 className="h-5 w-5" />
-              <span className="sr-only">Share</span>
-            </Button>
-          </div>
+          <div className="w-10"></div>
         </div>
       </header>
     );
@@ -87,8 +74,8 @@ const AskAgentDialog = ({ agent }: { agent: (typeof agents)[0] }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full text-lg" size="lg">
-          <MessageSquare className="mr-2 h-5 w-5" />
+        <Button variant="outline" className="w-full mt-4">
+          <MessageSquare className="mr-2 h-4 w-4" />
           Ask Your Agent
         </Button>
       </DialogTrigger>
@@ -126,6 +113,18 @@ export default function PackageDetailsPage() {
   const packageId = parseInt(params.id as string, 10);
   const pkg = allPackages.find((p) => p.id === packageId);
   const agent = pkg ? agents.find((a) => a.id === pkg.agentId) : null;
+  const { toast } = useToast();
+
+  const [isWishlisted, setIsWishlisted] = React.useState(pkg?.isWishlisted || false);
+  
+  const handleWishlistToggle = () => {
+    if (!pkg) return;
+    setIsWishlisted(!isWishlisted);
+    toast({
+        title: isWishlisted ? "Removed from Wishlist" : "Added to Wishlist",
+        description: `"${pkg.title}" has been ${isWishlisted ? 'removed from' : 'added to'} your wishlist.`,
+    });
+  };
 
   if (!pkg || !agent) {
     return (
@@ -165,70 +164,93 @@ export default function PackageDetailsPage() {
     "Travel insurance",
     "Tips and gratuities",
   ];
+  
+  const packageImages = [
+      pkg.image,
+      "https://placehold.co/600x400.png",
+      "https://placehold.co/600x400.png",
+      "https://placehold.co/600x400.png",
+  ];
+
+  const StatCard = ({ icon, label, value, hint }: { icon: React.ElementType, label: string, value: string, hint?: string }) => (
+    <Card className="shadow-md transition-all hover:shadow-lg hover:scale-105">
+      <CardContent className="p-4 flex items-center gap-4">
+        <div className="bg-primary/10 p-3 rounded-full">
+            {React.createElement(icon, { className: "h-6 w-6 text-primary" })}
+        </div>
+        <div>
+          <p className="text-sm text-muted-foreground">{label}</p>
+          <p className="font-bold text-lg">{value}</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <div className="bg-background text-foreground">
       <div className="mx-auto max-w-4xl">
         <div className="flex min-h-screen w-full flex-col">
-          <PackageHeader title={pkg.title} pkg={pkg} />
+          <PackageHeader title={pkg.title} />
           <main className="flex-1 overflow-y-auto pb-24">
-            <div className="relative h-64 md:h-80">
-              <Image
-                src={pkg.image}
-                alt={pkg.title}
-                layout="fill"
-                objectFit="cover"
-                className="w-full"
-                data-ai-hint={pkg.hint}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-0 left-0 p-6">
-                <h2 className="text-3xl font-bold text-white font-headline">
-                  {pkg.title}
-                </h2>
-                <div className="mt-2 flex items-center gap-4 text-white">
-                  <div className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4" />
-                    <span>{pkg.destination}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    <span>{pkg.duration}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+            <Carousel className="w-full">
+              <CarouselContent>
+                {packageImages.map((src, index) => (
+                  <CarouselItem key={index}>
+                    <div className="relative h-64 md:h-80">
+                      <Image
+                        src={src}
+                        alt={`${pkg.title} gallery image ${index + 1}`}
+                        layout="fill"
+                        objectFit="cover"
+                        className="w-full"
+                        data-ai-hint={`${pkg.hint} ${index % 2 === 0 ? 'scenery' : 'activity'}`}
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10" />
+              <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10" />
+            </Carousel>
+            
             <div className="p-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-6">
-                <div className="rounded-lg bg-card p-4 shadow">
-                  <p className="text-sm text-muted-foreground">Price</p>
-                  <p className="text-lg font-bold">₹{pkg.price}</p>
-                </div>
-                <div className="rounded-lg bg-card p-4 shadow">
-                  <p className="text-sm text-muted-foreground">Rating</p>
-                  <p className="flex items-center justify-center gap-1 text-lg font-bold">
-                    <Star className="h-5 w-5 text-accent fill-current" />
-                    {pkg.rating}
-                  </p>
-                </div>
-                <div className="rounded-lg bg-card p-4 shadow">
-                  <p className="text-sm text-muted-foreground">Group Size</p>
-                  <p className="flex items-center justify-center gap-1 text-lg font-bold">
-                    <Users className="h-5 w-5" />
-                    Up to 12
-                  </p>
-                </div>
-                 <div className="rounded-lg bg-card p-4 shadow">
-                  <p className="text-sm text-muted-foreground">Activity</p>
-                  <p className="flex items-center justify-center gap-1 text-lg font-bold">
-                    <User className="h-5 w-5" />
-                    Sightseeing
-                  </p>
-                </div>
+              <div className="flex justify-between items-start">
+                  <div>
+                    <h2 className="text-3xl font-bold text-foreground font-headline">
+                      {pkg.title}
+                    </h2>
+                    <div className="mt-2 flex items-center gap-4 text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <MapPin className="h-4 w-4" />
+                        <span>{pkg.destination}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 text-accent fill-current" />
+                        <span>{pkg.rating} ({agent.reviews} reviews)</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Button variant="outline" size="icon" onClick={handleWishlistToggle}>
+                      <Heart className={`h-5 w-5 ${isWishlisted ? 'text-primary fill-current' : ''}`} />
+                      <span className="sr-only">Wishlist</span>
+                    </Button>
+                    <Button variant="outline" size="icon">
+                      <Share2 className="h-5 w-5" />
+                      <span className="sr-only">Share</span>
+                    </Button>
+                  </div>
+              </div>
+
+
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 my-6">
+                  <StatCard icon={Tag} label="Price" value={`₹${pkg.price}`} />
+                  <StatCard icon={Clock} label="Duration" value={pkg.duration} />
+                  <StatCard icon={Users} label="Group Size" value="Up to 12" />
+                  <StatCard icon={User} label="Activity" value="Sightseeing" />
               </div>
               
-              <div className="mb-6 rounded-lg bg-card p-6 shadow">
+              <div className="mb-6 rounded-lg bg-card p-6 shadow-md">
                 <h3 className="text-xl font-bold font-headline mb-4">
                   Tour Operator
                 </h3>
@@ -240,9 +262,14 @@ export default function PackageDetailsPage() {
                     </Avatar>
                   </Link>
                   <div className="flex-1">
-                    <Link href={`/agents/${agent.id}`} passHref>
-                      <p className="font-bold text-lg hover:underline">{agent.name}</p>
-                    </Link>
+                    <div className="flex items-center gap-3">
+                        <Link href={`/agents/${agent.id}`} passHref>
+                            <p className="font-bold text-lg hover:underline">{agent.name}</p>
+                        </Link>
+                         <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
+                           <ShieldCheck className="h-4 w-4 mr-1"/> Trusted Partner
+                        </Badge>
+                    </div>
                     <p className="text-sm text-muted-foreground mb-1">
                       Verified Local Partner
                     </p>
@@ -251,6 +278,7 @@ export default function PackageDetailsPage() {
                       <span className="font-semibold">{agent.rating}</span>
                       <a href="#reviews" className="text-muted-foreground hover:underline">({agent.reviews} reviews)</a>
                     </div>
+                    <AskAgentDialog agent={agent} />
                   </div>
                 </div>
               </div>
@@ -341,10 +369,10 @@ export default function PackageDetailsPage() {
           </main>
           <footer className="fixed bottom-0 left-0 right-0 w-full bg-background/80 backdrop-blur-sm border-t">
             <div className="mx-auto max-w-4xl p-4">
-              <div className="flex gap-4">
-                <AskAgentDialog agent={agent} />
-                <Button size="lg" className="w-full text-lg">Request to Book</Button>
-              </div>
+                <Button size="lg" className="w-full text-lg">
+                    <ShieldCheck className="mr-2 h-5 w-5" />
+                    Pay with Escrow
+                </Button>
             </div>
           </footer>
         </div>

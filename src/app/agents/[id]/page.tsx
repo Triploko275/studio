@@ -2,7 +2,7 @@ import * as React from "react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { allPackages, agents } from "@/lib/data";
+import { packages as allPackages, agents } from "@/lib/data";
 import { AgentPageClientContent } from "./client-page";
 
 const AgentHeader = () => (

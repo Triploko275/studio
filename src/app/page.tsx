@@ -39,6 +39,7 @@ import {
   SheetTrigger,
   SheetFooter,
   SheetDescription,
+  SheetClose,
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -113,7 +114,9 @@ export const PackageCard = ({
                 </Button>
             </div>
             <div className="p-4 flex flex-col flex-grow">
-                <h3 className="font-headline text-lg font-bold truncate">{pkg.title}</h3>
+                <Link href={`/packages/${pkg.slug}`} passHref>
+                    <h3 className="font-headline text-lg font-bold truncate hover:underline">{pkg.title}</h3>
+                </Link>
                 <div className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                     <MapPin className="h-4 w-4" />
@@ -145,7 +148,9 @@ export const PackageCard = ({
                         </Link>
                     )}
                     <div>
-                         <p className="font-semibold text-sm">{agent?.name}</p>
+                        <Link href={`/agents/${agent.id}`} passHref>
+                           <p className="font-semibold text-sm hover:underline">{agent?.name}</p>
+                        </Link>
                          <p className="text-xs text-muted-foreground">Tour Operator</p>
                     </div>
                 </div>
@@ -397,5 +402,3 @@ export default function Home() {
     </div>
   );
 }
-
-    

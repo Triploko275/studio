@@ -48,7 +48,6 @@ export default function AllPackagesPage() {
         rating: 1,
     });
     
-    // State to manage wishlisted items
     const [wishlist, setWishlist] = React.useState(
         new Set(allPackages.filter(p => p.isWishlisted).map(p => p.id))
     );
@@ -75,12 +74,16 @@ export default function AllPackagesPage() {
         filtered = filtered.filter(p => parseInt(p.price.replace(/,/g, '')) <= newFilters.budget);
 
         if (newFilters.duration !== 'any') {
-            const [min, max] = newFilters.duration.split('-').map(Number);
-            filtered = filtered.filter(p => {
-                const duration = parseInt(p.duration);
-                if(newFilters.duration === '7+') return duration >= 7;
-                return duration >= min && duration <= max;
-            });
+            const durationValue = newFilters.duration;
+            if (durationValue === '7+') {
+                filtered = filtered.filter(p => parseInt(p.duration) >= 7);
+            } else {
+                const [min, max] = durationValue.split('-').map(Number);
+                filtered = filtered.filter(p => {
+                    const duration = parseInt(p.duration);
+                    return duration >= min && duration <= max;
+                });
+            }
         }
         
         filtered = filtered.filter(p => p.rating >= newFilters.rating);

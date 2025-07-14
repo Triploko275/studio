@@ -27,7 +27,8 @@ import { useToast } from "@/hooks/use-toast";
 
 // In a real app, this would be filtered by the logged-in agent's ID
 const agentPackages = packages.filter(p => p.agentId === 1);
-type Package = (typeof agentPackages)[0];
+type Package = (typeof agentPackages)[0] & { itinerary?: any[], inclusions?: string[], exclusions?: string[] };
+
 
 export default function AgentDashboardPage() {
   const { toast } = useToast();
@@ -44,7 +45,36 @@ export default function AgentDashboardPage() {
   };
 
   const handleDownload = (pkg: Package) => {
-    const content = `Package: ${pkg.title}\nDestination: ${pkg.destination}\nDuration: ${pkg.duration}\nPrice: ₹${pkg.price}`;
+    let content = `Package: ${pkg.title}\n`;
+    content += `Destination: ${pkg.destination}\n`;
+    content += `Duration: ${pkg.duration}\n`;
+    content += `Price: ₹${pkg.price}\n\n`;
+    
+    // In a real app, this data would come from the package itself
+    const dummyItinerary = [
+        { day: 1, title: "Arrival", description: "Arrive and check in." },
+        { day: 2, title: "City Tour", description: "Explore the city." },
+    ];
+    const inclusions = ["Airport transfers", "Accommodation", "Breakfast"];
+    const exclusions = ["Flights", "Visa", "Lunch & Dinner"];
+
+    content += "--- Itinerary ---\n";
+    dummyItinerary.forEach(day => {
+        content += `Day ${day.day}: ${day.title}\n`;
+        content += `${day.description}\n\n`;
+    });
+
+    content += "--- Inclusions ---\n";
+    inclusions.forEach(item => {
+        content += `- ${item}\n`;
+    });
+    content += "\n";
+
+    content += "--- Exclusions ---\n";
+    exclusions.forEach(item => {
+        content += `- ${item}\n`;
+    });
+
     const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

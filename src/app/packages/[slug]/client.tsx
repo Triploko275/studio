@@ -122,6 +122,41 @@ export function PackageDetailsClient({ pkg, agent }: { pkg: Package, agent: Agen
     });
   };
 
+  const handleShare = async () => {
+    if (!pkg) return;
+    const shareData = {
+      title: pkg.title,
+      text: `Check out this amazing travel package: ${pkg.title}`,
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast({
+          title: "Link Copied!",
+          description: "The package URL has been copied to your clipboard.",
+        });
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+      toast({
+        variant: "destructive",
+        title: "Could not share",
+        description: "Something went wrong while trying to share.",
+      });
+    }
+  };
+
+  if (!pkg || !agent) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        Package not found.
+      </div>
+    );
+  }
+
   const dummyItinerary = [
     { day: 1, title: "Arrival & City Exploration", description: "Arrive at the airport, transfer to your hotel, and enjoy a day exploring the local markets and landmarks." },
     { day: 2, title: "Cultural Immersion", description: "Visit ancient temples, museums, and historical sites to immerse yourself in the local culture." },
@@ -189,12 +224,7 @@ export function PackageDetailsClient({ pkg, agent }: { pkg: Package, agent: Agen
                         src={src}
                         alt={`${pkg.title} gallery image ${index + 1}`}
                         fill
-<<<<<<< HEAD:src/app/packages/[slug]/client.tsx
                         className="w-full object-cover"
-=======
-                        objectFit="cover"
-                        className="w-full"
->>>>>>> a719621 (in the home page, can we get these at bottom , ( Home, My trips, Shortli):src/app/packages/[id]/page.tsx
                         data-ai-hint={`${pkg.hint} ${index % 2 === 0 ? 'scenery' : 'activity'}`}
                       />
                     </div>
@@ -227,7 +257,7 @@ export function PackageDetailsClient({ pkg, agent }: { pkg: Package, agent: Agen
                       <Heart className={`h-5 w-5 ${isWishlisted ? 'text-primary fill-current' : ''}`} />
                       <span className="sr-only">Wishlist</span>
                     </Button>
-                    <Button variant="outline" size="icon">
+                    <Button variant="outline" size="icon" onClick={handleShare}>
                       <Share2 className="h-5 w-5" />
                       <span className="sr-only">Share</span>
                     </Button>
@@ -372,3 +402,5 @@ export function PackageDetailsClient({ pkg, agent }: { pkg: Package, agent: Agen
     </div>
   );
 }
+
+    

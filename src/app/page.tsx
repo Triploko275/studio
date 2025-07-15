@@ -43,11 +43,7 @@ import {
   SheetTrigger,
   SheetFooter,
   SheetDescription,
-<<<<<<< HEAD
-  SheetClose,
-=======
   SheetClose
->>>>>>> a719621 (in the home page, can we get these at bottom , ( Home, My trips, Shortli)
 } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
@@ -410,7 +406,7 @@ export default function Home() {
                                 src={dest.image}
                                 alt={dest.name}
                                 fill
-                                objectFit="cover"
+                                style={{objectFit:"cover"}}
                                 className="transition-transform duration-300 group-hover:scale-110"
                                 data-ai-hint={dest.hint}
                             />
@@ -535,3 +531,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
